@@ -2,7 +2,7 @@ import React from 'react';
 
 const LanguageGuide = () => {
   return (
-    <div className="w-full h-full bg-black/20 rounded-[2rem] p-8 overflow-auto text-white/80 font-sans leading-relaxed">
+    <div className="w-full h-full p-6 sm:p-8 overflow-auto text-white/80 font-sans leading-relaxed">
       <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">MiniLang Guide</h2>
       
       <div className="space-y-8">

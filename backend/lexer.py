@@ -14,6 +14,7 @@ class LexerError(Exception):
         self.column = column
 
 TOKEN_SPECIFICATION = [
+    ('COMMENT',     r'//.*'),
     ('FLOAT_CONST', r'\d+\.\d+'),
     ('INT_CONST',   r'\d+'),
     ('IDENT',       r'[A-Za-z_][A-Za-z0-9_]*'),
@@ -28,14 +29,13 @@ TOKEN_SPECIFICATION = [
     ('GT',          r'>'),
     ('PLUS',        r'\+'),
     ('MINUS',       r'-'),
-    ('STAR',        r'\*'),
-    ('SLASH',       r'/'),
+    ('MUL',         r'\*'),
+    ('DIV',         r'/'),
     ('LPAREN',      r'\('),
     ('RPAREN',      r'\)'),
     ('LBRACE',      r'\{'),
     ('RBRACE',      r'\}'),
     ('SEMICOLON',   r';'),
-    ('COMMENT',     r'//.*'),
     ('WHITESPACE',  r'[ \t]+'),
     ('NEWLINE',     r'\n'),
     ('MISMATCH',    r'.'),

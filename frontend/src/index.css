@@ -37,3 +37,18 @@ code {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Tree Connector Lines - Apple HIG High-Contrast Visible Strokes */
+.rd3t-link,
+path.rd3t-link {
+  fill: none !important;
+  stroke: rgba(255, 255, 255, 0.45) !important;
+  stroke-width: 2px !important;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+.rd3t-link:hover,
+path.rd3t-link:hover {
+  stroke: #64d2ff !important;
+  stroke-width: 3px !important;
+}

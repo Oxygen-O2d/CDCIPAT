@@ -158,6 +158,22 @@ const TreeVisualizer = ({ data }) => {
 
   return (
     <div ref={containerRef} className="w-full h-full relative overflow-hidden bg-black/30 select-none">
+      {/* Explicit SVG Link Styles to guarantee high contrast over library defaults */}
+      <style>{`
+        .rd3t-link, 
+        path.rd3t-link {
+          fill: none !important;
+          stroke: rgba(255, 255, 255, 0.5) !important;
+          stroke-width: 2px !important;
+          stroke-linecap: round !important;
+        }
+        .rd3t-link:hover, 
+        path.rd3t-link:hover {
+          stroke: #64d2ff !important;
+          stroke-width: 3px !important;
+        }
+      `}</style>
+
       {/* Floating View Controls (Apple HIG Glass Pill) */}
       <div className="absolute top-4 right-6 z-20 flex items-center gap-2 p-1.5 bg-black/60 backdrop-blur-2xl border border-white/10 rounded-full shadow-2xl ring-1 ring-white/5">
         <div className="flex bg-white/5 rounded-full p-0.5 border border-white/5">
@@ -206,12 +222,13 @@ const TreeVisualizer = ({ data }) => {
         orientation={orientation}
         pathFunc={pathFunc}
         translate={translate}
-        nodeSize={orientation === 'horizontal' ? { x: 240, y: 65 } : { x: 200, y: 90 }}
+        nodeSize={orientation === 'horizontal' ? { x: 280, y: 75 } : { x: 210, y: 100 }}
         renderCustomNodeElement={renderCustomNodeElement}
-        separation={{ siblings: 1.1, nonSiblings: 1.5 }}
+        separation={{ siblings: 1.1, nonSiblings: 1.6 }}
         zoom={0.85}
         enableLegacyTransitions={true}
         transitionDuration={350}
+        pathClassFunc={() => 'rd3t-link'}
       />
     </div>
   );

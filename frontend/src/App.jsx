@@ -40,6 +40,11 @@ function App() {
       setCompileRes(res.data);
       if (res.data.error) {
         setError(res.data.error);
+        if (res.data.stage === "Semantic Analysis") {
+          setActiveTab('semantic');
+        } else if (res.data.stage === "Syntax Analysis") {
+          setActiveTab('tokens');
+        }
       } else {
         setActiveTab('output');
       }
@@ -68,13 +73,8 @@ function App() {
           <span className="text-[10px] font-bold uppercase tracking-widest bg-white/10 text-white/80 px-3 py-1.5 rounded-full shadow-inner ring-1 ring-white/10">Compiler</span>
         </div>
         <div className="flex-1 overflow-hidden">
-          <Editor code={code} setCode={setCode} examples={examples} onCompile={handleCompile} />
+          <Editor code={code} setCode={setCode} examples={examples} onCompile={handleCompile} error={error} />
         </div>
-        {error && (
-          <div className="absolute bottom-6 left-6 right-6 p-4 bg-red-500/20 backdrop-blur-xl border border-red-500/30 text-red-200 font-medium text-sm rounded-2xl shadow-2xl ring-1 ring-red-500/20">
-            {error}
-          </div>
-        )}
       </div>
 
       {/* Right Panel - Visualization & Tabs (Floating Glass) */}

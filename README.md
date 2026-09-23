@@ -2,7 +2,7 @@
 
 An academic Compiler Design project demonstrating a complete 5-stage compilation pipeline from scratch (no parser generators).
 
-## Compilation Pipeline
+## Compilation Pipeline 
 
 1. **Lexical Analysis:** Tokenizes input into a stream of tokens.
 2. **Syntax Analysis:** Builds an Abstract Syntax Tree (AST) using a hand-written LL(1) recursive-descent parser.

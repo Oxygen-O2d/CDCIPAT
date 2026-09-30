@@ -1,6 +1,34 @@
 import React from 'react';
+import CodeEditorModule from 'react-simple-code-editor';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-clike';
+import 'prismjs/themes/prism-tomorrow.css';
 
-const Editor = ({ code, setCode, examples, onCompile, error }) => {
+const CodeEditor = CodeEditorModule.default || CodeEditorModule;
+
+Prism.languages.minilang = {
+  'comment': /\/\/.*/,
+  'keyword': /\b(?:num|dec|output|check|otherwise|repeat)\b/,
+  'boolean': /\b(?:true|false)\b/,
+  'number': /\b\d+(?:\.\d+)?\b/,
+  'operator': /==|!=|<=|>=|<|>|&&|\|\||\+|-|\*|\/|=/,
+  'punctuation': /[{}[\];(),.:]/
+};
+
+
+const Editor = ({ code, setCode, examples, onCompile, error, hoveredLine, setHoveredLine, errorsData = [] }) => {
+  const handleMouseMove = (e) => {
+    if (!setHoveredLine) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    const line = Math.floor(y / 21) + 1; // 21px line-height
+    setHoveredLine(line);
+  };
+
+  const handleMouseLeave = () => {
+    if (setHoveredLine) setHoveredLine(null);
+  };
+
   return (
     <div className="flex flex-col h-full relative bg-transparent">
       <div className="px-6 sm:px-8 py-3.5 sm:py-4 flex gap-4 items-center justify-between z-10 border-b border-white/5 bg-white/[0.02]">
@@ -18,14 +46,76 @@ const Editor = ({ code, setCode, examples, onCompile, error }) => {
           ))}
         </select>
       </div>
-      <div className="flex-1 p-6 sm:p-8 relative min-h-0">
-        <textarea
-          className="w-full h-full bg-transparent text-[#e5e5ea] font-mono text-sm leading-relaxed p-0 border-none focus:outline-none focus:ring-0 resize-none drop-shadow-sm"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder={`// Enter MiniLang code here...`}
-          spellCheck="false"
-        />
+      <div className="flex-1 p-6 sm:p-8 relative min-h-0 overflow-auto">
+        <div 
+          className="relative min-h-full w-full"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          {hoveredLine && (
+            <div 
+              className="absolute pointer-events-none bg-white/10 rounded-md transition-all duration-75 ease-out"
+              style={{ 
+                left: '-8px',
+                right: '-8px',
+                top: `${(hoveredLine - 1) * 21}px`,
+                height: '21px',
+                zIndex: 0
+              }} 
+            />
+          )}
+          
+          {errorsData.map((err, i) => {
+            const lineText = code.split('\n')[err.line - 1] || '';
+            let colIndex = 0;
+            let tokenLength = 0;
+            
+            if (err.token) {
+              const idx = lineText.indexOf(err.token);
+              if (idx !== -1) {
+                colIndex = idx;
+                tokenLength = err.token.length;
+              } else {
+                colIndex = lineText.length - lineText.trimStart().length;
+                tokenLength = lineText.trim().length || 1;
+              }
+            } else {
+              colIndex = lineText.length - lineText.trimStart().length;
+              tokenLength = lineText.trim().length || 1;
+            }
+
+            return (
+              <div 
+                key={`err-${err.line}-${i}`}
+                className="absolute pointer-events-none bg-red-500/30 border-b-[2.5px] border-red-500 border-dotted rounded-sm transition-all duration-200"
+                style={{ 
+                  left: `calc(${colIndex}ch)`,
+                  width: `calc(${tokenLength}ch)`,
+                  top: `${(err.line - 1) * 21}px`,
+                  height: '21px',
+                  zIndex: 0
+                }} 
+              />
+            );
+          })}
+          <div className="relative z-10 min-w-max">
+            <CodeEditor
+              value={code}
+              onValueChange={code => setCode(code)}
+              highlight={code => Prism.highlight(code, Prism.languages.minilang, 'minilang')}
+              padding={0}
+              className="w-full bg-transparent font-mono text-sm p-0 border-none focus:outline-none focus:ring-0 whitespace-pre"
+              style={{
+                fontFamily: '"Fira Code", "JetBrains Mono", monospace',
+                lineHeight: '21px',
+                minHeight: '100%',
+                whiteSpace: 'pre'
+              }}
+              textareaClassName="focus:outline-none focus:ring-0 whitespace-pre"
+              placeholder={`// Enter MiniLang code here...`}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Error alert banner in regular layout flow - never overlaps the action button */}

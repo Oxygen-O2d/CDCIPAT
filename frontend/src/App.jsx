@@ -18,6 +18,33 @@ function App() {
   const [compileRes, setCompileRes] = useState(null);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('guide');
+  const [hoveredLine, setHoveredLine] = useState(null);
+
+  const errorsData = React.useMemo(() => {
+    const data = [];
+    
+    const extractToken = (msg) => {
+      const match = msg.match(/'([^']+)'/);
+      return match ? match[1] : null;
+    };
+
+    if (error) {
+      const match = error.match(/line (\d+)/i);
+      if (match) {
+        data.push({ line: parseInt(match[1], 10), token: extractToken(error) });
+      }
+    }
+    
+    if (compileRes?.semantic_issues) {
+      compileRes.semantic_issues.forEach(issue => {
+        if (issue.type === 'error') {
+          data.push({ line: issue.line, token: extractToken(issue.message) });
+        }
+      });
+    }
+    
+    return data;
+  }, [error, compileRes]);
 
   useEffect(() => {
     axios.get(`${API_URL}/examples`)
@@ -73,7 +100,7 @@ function App() {
           <span className="text-[10px] font-bold uppercase tracking-widest bg-white/10 text-white/80 px-3 py-1.5 rounded-full shadow-inner ring-1 ring-white/10">Compiler</span>
         </div>
         <div className="flex-1 overflow-hidden">
-          <Editor code={code} setCode={setCode} examples={examples} onCompile={handleCompile} error={error} />
+          <Editor code={code} setCode={setCode} examples={examples} onCompile={handleCompile} error={error} hoveredLine={hoveredLine} setHoveredLine={setHoveredLine} errorsData={errorsData} />
         </div>
       </div>
 
@@ -114,7 +141,7 @@ function App() {
           ) : (
             <>
               {activeTab === 'tokens' && <div className="h-full p-6 sm:p-8 overflow-auto"><TokensTable tokens={compileRes.tokens || []} /></div>}
-              {activeTab === 'ast' && compileRes.ast && <div className="h-full w-full relative"><TreeVisualizer data={compileRes.ast} /></div>}
+              {activeTab === 'ast' && compileRes.ast && <div className="h-full w-full relative"><TreeVisualizer data={compileRes.ast} hoveredLine={hoveredLine} setHoveredLine={setHoveredLine} /></div>}
               {activeTab === 'symbols' && <div className="h-full p-6 sm:p-8 overflow-auto"><SymbolTable symbols={compileRes.symbol_table || []} /></div>}
               {activeTab === 'semantic' && <div className="h-full p-6 sm:p-8 overflow-auto"><SemanticChecks issues={compileRes.semantic_issues || []} /></div>}
               {activeTab === 'tac' && <div className="h-full p-6 sm:p-8 overflow-auto"><IntermediateCode tac={compileRes.tac || []} /></div>}

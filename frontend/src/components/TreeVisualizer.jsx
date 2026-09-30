@@ -46,7 +46,7 @@ const transformAST = (node) => {
   };
 };
 
-const TreeVisualizer = ({ data }) => {
+const TreeVisualizer = ({ data, hoveredLine, setHoveredLine }) => {
   const containerRef = useRef(null);
   const [orientation, setOrientation] = useState('horizontal');
   const [pathFunc, setPathFunc] = useState('diagonal');
@@ -84,6 +84,11 @@ const TreeVisualizer = ({ data }) => {
     const labelWidth = Math.max(140, Math.min(220, nodeDatum.name.length * 9 + 40));
     const height = attrText ? 44 : 32;
 
+    // Determine if this node matches the hovered line
+    const nodeLineStr = nodeDatum.attributes?.line;
+    const nodeLine = nodeLineStr ? parseInt(nodeLineStr, 10) : null;
+    const isHovered = hoveredLine && nodeLine === hoveredLine;
+
     return (
       <g>
         {/* Node card box */}
@@ -95,10 +100,19 @@ const TreeVisualizer = ({ data }) => {
           rx={10}
           fill="#1c1c1e"
           stroke={colors.border}
-          strokeWidth={1.5}
+          strokeWidth={isHovered ? 2.5 : 1.5}
+          onMouseEnter={() => {
+            if (nodeLine && setHoveredLine) setHoveredLine(nodeLine);
+          }}
+          onMouseLeave={() => {
+            if (setHoveredLine) setHoveredLine(null);
+          }}
           onClick={toggleNode}
-          className="cursor-pointer transition-all duration-200 hover:brightness-125"
-          style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))' }}
+          className="cursor-pointer transition-all duration-200"
+          style={{ 
+            filter: isHovered ? 'drop-shadow(0 0 12px rgba(255,255,255,0.4))' : 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))',
+            brightness: isHovered ? 1.2 : 1
+          }}
         />
         
         {/* Category color indicator pill */}

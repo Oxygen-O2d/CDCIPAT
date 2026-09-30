@@ -50,6 +50,25 @@ class CompileResponse(BaseModel):
     output: Optional[List[str]] = None
 
 EXAMPLES = {
+    "All Keywords Test": """
+// Tests all keywords: num, dec, check, otherwise, repeat, output
+num base = 10;
+dec multiplier = 2.5;
+dec threshold = 20.0;
+dec current = base * multiplier;
+
+check (current > threshold) {
+    output(current);
+} otherwise {
+    output(threshold);
+}
+
+num counter = 3;
+repeat (counter > 0) {
+    output(counter);
+    counter = counter - 1;
+}
+""",
     "Factorial": """
 num n = 5;
 num result = 1;
@@ -59,15 +78,63 @@ repeat (n > 0) {
 }
 output(result);
 """,
-    "Type Checking": """
-num x = 10;
-dec y = 3.14;
-x = y; // Semantic Warning: Float to Int
-output(x);
+    "Fibonacci Sequence": """
+num a = 0;
+num b = 1;
+num max = 50;
+num next = 0;
+
+output(a);
+output(b);
+
+repeat (b < max) {
+    next = a + b;
+    a = b;
+    b = next;
+    
+    check (b < max) {
+        output(b);
+    }
+}
 """,
-    "Undeclared Var": """
-num a = 5;
-b = a + 2; // Semantic Error: b undeclared
+    "Complex Logic": """
+num x = 15;
+num y = 30;
+
+check (x < y && x != 0) {
+    output(x);
+} otherwise {
+    output(y);
+}
+""",
+    "Error (Phase 1): Lexical": """
+// Lexical Analyzer will fail here because '@' is an invalid character
+num score = 100;
+score = score @ 10;
+""",
+    "Error (Phase 2): Syntax": """
+// Syntax Analyzer will fail here due to a missing semicolon
+num age = 20
+num next_year = age + 1;
+output(next_year);
+""",
+    "Error (Phase 3): Undeclared Var": """
+// Semantic Analyzer will catch that 'total' was never declared
+num subtotal = 50;
+total = subtotal + 10; 
+""",
+    "Error (Phase 3): Redeclaration": """
+// Semantic Analyzer will catch the duplicate declaration
+num count = 1;
+num count = 2; // Error: count already declared
+output(count);
+""",
+    "Warning (Phase 3): Type Mismatch": """
+// Semantic Analyzer will issue a warning for precision loss
+num integer_val = 10;
+dec float_val = 3.14;
+integer_val = float_val; // Warning: Assigning dec to num
+output(integer_val);
 """
 }
 

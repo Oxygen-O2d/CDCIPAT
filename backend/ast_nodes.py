@@ -14,6 +14,7 @@ class ProgramNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Program",
             "statements": [stmt.to_dict() for stmt in self.statements]
         }
@@ -25,6 +26,7 @@ class BlockNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Block",
             "statements": [stmt.to_dict() for stmt in self.statements]
         }
@@ -38,6 +40,7 @@ class DeclNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Declaration",
             "var_type": self.var_type,
             "identifier": self.identifier,
@@ -52,6 +55,7 @@ class AssignNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Assignment",
             "identifier": self.identifier,
             "expr": self.expr.to_dict()
@@ -64,6 +68,7 @@ class PrintNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Print",
             "expr": self.expr.to_dict()
         }
@@ -77,6 +82,7 @@ class IfNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         d = {
+            'line': self.line,
             "type": "If",
             "condition": self.condition.to_dict(),
             "true_block": self.true_block.to_dict()
@@ -93,6 +99,7 @@ class WhileNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "While",
             "condition": self.condition.to_dict(),
             "block": self.block.to_dict()
@@ -107,6 +114,7 @@ class BinOpNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "BinOp",
             "op": self.op,
             "left": self.left.to_dict(),
@@ -120,6 +128,7 @@ class IntNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "IntConst",
             "value": self.value
         }
@@ -131,6 +140,7 @@ class FloatNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "FloatConst",
             "value": self.value
         }
@@ -142,6 +152,7 @@ class IdentNode(ASTNode):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            'line': self.line,
             "type": "Identifier",
             "name": self.name
         }

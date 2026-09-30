@@ -48,6 +48,49 @@ const LanguageGuide = () => {
             output(count);
           </div>
         </section>
+
+        <section>
+          <h3 className="text-sm font-bold text-white/50 uppercase tracking-widest mb-3 border-b border-white/10 pb-2">Operators & Expressions</h3>
+          <p className="text-sm mb-2">MiniLang supports standard arithmetic, relational, and logical operators.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-white/60 font-mono bg-black/20 p-3 rounded-xl border border-white/5">
+            <div>
+              <p className="text-white/40 mb-2 text-xs uppercase tracking-wider">Arithmetic</p>
+              <ul className="space-y-1">
+                <li><code className="text-[#ff9f0a] font-bold w-6 inline-block text-center">+</code> Addition</li>
+                <li><code className="text-[#ff9f0a] font-bold w-6 inline-block text-center">-</code> Subtraction</li>
+                <li><code className="text-[#ff9f0a] font-bold w-6 inline-block text-center">*</code> Multiplication</li>
+                <li><code className="text-[#ff9f0a] font-bold w-6 inline-block text-center">/</code> Division</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-white/40 mb-2 text-xs uppercase tracking-wider">Relational & Logical</p>
+              <ul className="space-y-1">
+                <li><code className="text-[#ff9f0a] font-bold w-12 inline-block text-center">&gt; &lt;</code> Comparison</li>
+                <li><code className="text-[#ff9f0a] font-bold w-12 inline-block text-center">== !=</code> Equality</li>
+                <li><code className="text-[#ff9f0a] font-bold w-12 inline-block text-center">&amp;&amp; ||</code> AND / OR</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h3 className="text-sm font-bold text-white/50 uppercase tracking-widest mb-3 border-b border-white/10 pb-2">Complete Example</h3>
+          <p className="text-sm mb-2">A complete MiniLang program demonstrating variables, math, and loops.</p>
+          <div className="bg-black/40 p-4 rounded-xl border border-white/5 font-mono text-sm text-[#64d2ff] whitespace-pre overflow-x-auto">
+{`// Print numbers up to limit
+num i = 1;
+num limit = 5;
+
+repeat (i <= limit) {
+  check (i == 3) {
+    output(999); // Special case
+  } otherwise {
+    output(i);
+  }
+  i = i + 1;
+}`}
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -6,38 +6,38 @@ This document outlines the architecture for the CDCIPAT MiniLang Compiler projec
 
 ```mermaid
 flowchart TB
-    subgraph Frontend [Frontend (React + Vite)]
-        UI[User Interface]
-        Editor[Code Editor]
-        Viz[Visualizers & Tables]
+    subgraph Frontend ["Frontend (React + Vite)"]
+        UI["User Interface"]
+        Editor["Code Editor"]
+        Viz["Visualizers & Tables"]
         
         UI --> Editor
         UI --> Viz
     end
 
-    subgraph Backend [Backend (FastAPI)]
-        API[POST /api/compile]
+    subgraph Backend ["Backend (FastAPI)"]
+        API["POST /api/compile"]
         
-        Lexer[1. Lexical Analyzer\nlexer.py]
-        Parser[2. Syntax Analyzer\nparser.py]
-        Semantic[3. Semantic Analyzer\nsemantic.py]
-        Codegen[4. Intermediate Code Gen\ncodegen.py]
-        Executor[5. Executor\nexecutor.py]
+        Lexer["1. Lexical Analyzer<br>lexer.py"]
+        Parser["2. Syntax Analyzer<br>parser.py"]
+        Semantic["3. Semantic Analyzer<br>semantic.py"]
+        Codegen["4. Intermediate Code Gen<br>codegen.py"]
+        Executor["5. Executor<br>executor.py"]
         
         API --> Lexer
-        Lexer -->|Tokens| Parser
-        Parser -->|AST| Semantic
-        Semantic -->|AST + Symbol Table| Codegen
-        Codegen -->|TAC| Executor
+        Lexer -->|"Tokens"| Parser
+        Parser -->|"AST"| Semantic
+        Semantic -->|"AST + Symbol Table"| Codegen
+        Codegen -->|"TAC"| Executor
     end
 
-    Editor -->|Raw Source Code| API
+    Editor -->|"Raw Source Code"| API
     
-    Lexer -.->|Tokens Data| Viz
-    Parser -.->|AST Data| Viz
-    Semantic -.->|Symbol Table & Errors| Viz
-    Codegen -.->|Three-Address Code| Viz
-    Executor -.->|Standard Output| Viz
+    Lexer -.->|"Tokens Data"| Viz
+    Parser -.->|"AST Data"| Viz
+    Semantic -.->|"Symbol Table & Errors"| Viz
+    Codegen -.->|"Three-Address Code"| Viz
+    Executor -.->|"Standard Output"| Viz
 ```
 
 ---
